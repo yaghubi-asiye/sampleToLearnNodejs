@@ -4,7 +4,7 @@
   "description": "this is sample for exersise nodejs ",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon index.js"
   },
   "author": "Asiye Yaghubi",
   "license": "ISC",
