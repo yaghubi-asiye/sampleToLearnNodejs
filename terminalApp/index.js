@@ -1,36 +1,15 @@
-// const fs = require('fs');
-// const persons = [
-//     {id:1, name:'asiye'},
-//     {id:2, name:'zahra'},
-//     {id:3, name:'maryam'}
-// ];
-// fs.writeFileSync('db/person.json', JSON.stringify(persons));
-// const data = JSON.parse(fs.readFileSync('db/person.json').toString());
-// console.log(typeof data);
-
-
-
-// const command = process.argv[2];
-// switch(command) {
-//     case 'add':
-//         console.log('adding ...')
-//         break;
-//     case 'remove':
-//         console.log('removeing ...')
-//         break;
-//     default:
-//         console.log('command not valid ...')
-//         break;
-// }
-
-
 const yargs = require("yargs");
-// console.log(process.argv)
-// console.log(yargs.argv)
+const chalk = require('chalk');
+
+const {addPerson, listPersons, removePerson} = require('./src/person');
+
+yargs.scriptName(`${chalk.yellow("person management")}`);
+yargs.usage(`$0 ${chalk.red("<command>")} ${chalk.yellow("[args]")}`);
+yargs.version("1.1.0");
 
 yargs.command({
     command: "create",
-    describe: "[create new person]",
+    describe: `${chalk.green("[create new person]")}`,
     aliases: ["c"],
     builder: {
         fullname: {
@@ -53,9 +32,34 @@ yargs.command({
         },
     },
     handler({fullname, phone, email}) {
-        console.log(fullname, email, phone)
+        addPerson(fullname, phone, email);
     },
 });
 
+yargs.command({
+    command: "list",
+    describe: `${chalk.green("[listing persons saved]")}`,
+    aliases: ['l'],
+    handler() {
+        listPersons();
+    }
+});
+
+yargs.command({
+    command: "remove",
+    describe: `${chalk.green("[remove persons]")}`,
+    aliases: ['r'],
+    builder: {
+        fullname: {
+            alias: "f",
+            describe: "Persons Fullname",
+            demandOption: true,
+            type: "string",
+        }
+    },
+    handler({fullname}) {
+        removePerson(fullname);
+    }
+})
+
 yargs.parse();
-// console.log(yargs.argv)
